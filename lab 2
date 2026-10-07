@@ -1,0 +1,1371 @@
+ubuntu@ubuntu:~$ ls /media/ubuntu/
+DATA
+ubuntu@ubuntu:~$ ls -lh /media/ubuntu/DATA/embedded_lab1_backup.tar.gz
+-rw-rw-r-- 1 ubuntu ubuntu 717M Oct  5 04:56 /media/ubuntu/DATA/embedded_lab1_backup.tar.gz
+ubuntu@ubuntu:~$ cd ~
+ubuntu@ubuntu:~$ tar -xzf /media/ubuntu/DATA/embedded_lab1_backup.tar.gz
+tar: embedded_lab1/rootfs/initramfs/dev/random: Cannot mknod: Operation not permitted
+tar: embedded_lab1/rootfs/initramfs/dev/zero: Cannot mknod: Operation not permitted
+tar: embedded_lab1/rootfs/initramfs/dev/console: Cannot mknod: Operation not permitted
+tar: embedded_lab1/rootfs/initramfs/dev/null: Cannot mknod: Operation not permitted
+
+tar: Exiting with failure status due to previous errors
+ubuntu@ubuntu:~$ 
+ubuntu@ubuntu:~$ sudo rm -rf ~/embedded_lab1
+ubuntu@ubuntu:~$ cd ~
+sudo tar -xzf /media/ubuntu/DATA/embedded_lab1_backup.tar.gz
+ubuntu@ubuntu:~$ sudo chown -R ubuntu:ubuntu ~/embedded_lab1
+ubuntu@ubuntu:~$ ls -lh ~/embedded_lab1/output/
+total 10M
+-rw-rw-r-- 1 ubuntu ubuntu 1.1M Oct  5 04:30 initramfs.cpio.gz
+-rwxrwxr-x 1 ubuntu ubuntu 4.2M Oct  5 04:10 u-boot
+-rw-rw-r-- 1 ubuntu ubuntu  14K Oct  5 03:55 vexpress-v2p-ca9.dtb
+-rwxrwxr-x 1 ubuntu ubuntu 4.8M Oct  5 03:55 zImage
+ubuntu@ubuntu:~$ ls ~/embedded_lab1/kernel/linux-5.15 | head
+COPYING
+CREDITS
+Documentation
+Kbuild
+Kconfig
+LICENSES
+MAINTAINERS
+Makefile
+Module.symvers
+README
+ubuntu@ubuntu:~$ sudo apt install -y mtd-utils
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libiniparser1
+The following NEW packages will be installed:
+  libiniparser1 mtd-utils
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 297 kB of archives.
+After this operation, 1419 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libiniparser1 amd64 4.1-7ubuntu0.1 [10.7 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 mtd-utils amd64 1:2.2.0-1ubuntu2 [286 kB]
+Fetched 297 kB in 7s (43.6 kB/s)                                               
+Selecting previously unselected package libiniparser1:amd64.
+(Reading database ... 213826 files and directories currently installed.)
+Preparing to unpack .../libiniparser1_4.1-7ubuntu0.1_amd64.deb ...
+Unpacking libiniparser1:amd64 (4.1-7ubuntu0.1) ...
+Selecting previously unselected package mtd-utils.
+Preparing to unpack .../mtd-utils_1%3a2.2.0-1ubuntu2_amd64.deb ...
+Unpacking mtd-utils (1:2.2.0-1ubuntu2) ...
+Setting up libiniparser1:amd64 (4.1-7ubuntu0.1) ...
+Setting up mtd-utils (1:2.2.0-1ubuntu2) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+ubuntu@ubuntu:~$ sudo apt install -y squashfs-tools
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+squashfs-tools is already the newest version (1:4.6.1-1build1).
+squashfs-tools set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+ubuntu@ubuntu:~$ sudo apt install -y linux-headers-$(uname -r)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+linux-headers-7.0.0-31-generic is already the newest version (7.0.0-31.31~24.04.1).
+linux-headers-7.0.0-31-generic set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+ubuntu@ubuntu:~$ mkdir -p ~/embedded_lab2/{driver,rootfs,mtd,output,configs}
+ubuntu@ubuntu:~$ mkdir -p ~/embedded_lab2/rootfs/initramfs
+ubuntu@ubuntu:~$ sudo cp -r ~/embedded_lab1/rootfs/initramfs/* ~/embedded_lab2/rootfs/initramfs/
+ubuntu@ubuntu:~$ sudo chown -R $USER:$USER ~/embedded_lab2
+ubuntu@ubuntu:~$ ls ~/embedded_lab2
+configs  driver  mtd  output  rootfs
+ubuntu@ubuntu:~$ cd ~/embedded_lab2/driver
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano lab2_driver.c
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano Makefile
+ubuntu@ubuntu:~/embedded_lab2/driver$ make
+Command 'make' not found, but can be installed with:
+sudo apt install make        # version 4.3-4.1build1, or
+sudo apt install make-guile  # version 4.3-4.1build1
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo apt install -y make
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Suggested packages:
+  make-doc
+The following NEW packages will be installed:
+  make
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 0 B/180 kB of archives.
+After this operation, 414 kB of additional disk space will be used.
+Get:1 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble/main amd64 make amd64 4.3-4.1build2 [180 kB]
+Selecting previously unselected package make.
+(Reading database ... 213885 files and directories currently installed.)
+Preparing to unpack .../make_4.3-4.1build2_amd64.deb ...
+Unpacking make (4.3-4.1build2) ...
+Setting up make (4.3-4.1build2) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+ubuntu@ubuntu:~/embedded_lab2/driver$ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+ubuntu@ubuntu:~/embedded_lab2/driver$ make
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- modules
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+make[1]: arm-linux-gnueabihf-gcc: No such file or directory
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: arm-linux-gnueabihf-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  You are using:           
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.o
+/bin/sh: 1: arm-linux-gnueabihf-gcc: not found
+make[2]: *** [scripts/Makefile.build:277: /home/ubuntu/embedded_lab2/driver/lab2_driver.o] Error 127
+make[1]: *** [Makefile:1868: /home/ubuntu/embedded_lab2/driver] Error 2
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+make: *** [Makefile:8: all] Error 2
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo apt install -y gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  binutils-common cpp-13-arm-linux-gnueabihf cpp-arm-linux-gnueabihf
+  gcc-13-arm-linux-gnueabihf gcc-13-arm-linux-gnueabihf-base
+  gcc-13-cross-base gcc-14-cross-base libasan8-armhf-cross
+  libatomic1-armhf-cross libc6-armhf-cross libc6-dev-armhf-cross
+  libcc1-0 libgcc-13-dev-armhf-cross libgcc-s1-armhf-cross
+  libgomp1-armhf-cross libsframe1 libstdc++6-armhf-cross
+  libubsan1-armhf-cross linux-libc-dev-armhf-cross
+Suggested packages:
+  binutils-doc gcc-13-locales cpp-13-doc cpp-doc gcc-13-doc autoconf
+  automake libtool flex bison gdb-arm-linux-gnueabihf gcc-doc
+The following NEW packages will be installed:
+  binutils-arm-linux-gnueabihf binutils-common
+  cpp-13-arm-linux-gnueabihf cpp-arm-linux-gnueabihf
+  gcc-13-arm-linux-gnueabihf gcc-13-arm-linux-gnueabihf-base
+  gcc-13-cross-base gcc-14-cross-base gcc-arm-linux-gnueabihf
+  libasan8-armhf-cross libatomic1-armhf-cross libc6-armhf-cross
+  libc6-dev-armhf-cross libcc1-0 libgcc-13-dev-armhf-cross
+  libgcc-s1-armhf-cross libgomp1-armhf-cross libsframe1
+  libstdc++6-armhf-cross libubsan1-armhf-cross
+  linux-libc-dev-armhf-cross
+0 upgraded, 21 newly installed, 0 to remove and 0 not upgraded.
+Need to get 43.3 MB/43.6 MB of archives.
+After this operation, 139 MB of additional disk space will be used.
+Get:1 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble/main amd64 binutils-common amd64 2.42-4ubuntu2.10 [240 kB]
+Get:2 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble/main amd64 libcc1-0 amd64 14.2.0-4ubuntu2~24.04.1 [48.0 kB]
+Get:3 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble/main amd64 libsframe1 amd64 2.42-4ubuntu2.10 [15.7 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 gcc-13-arm-linux-gnueabihf-base amd64 13.3.0-6ubuntu2~24.04.1cross1 [51.8 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 cpp-13-arm-linux-gnueabihf amd64 13.3.0-6ubuntu2~24.04.1cross1 [10.2 MB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 cpp-arm-linux-gnueabihf amd64 4:13.2.0-7ubuntu1 [5324 B]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 binutils-arm-linux-gnueabihf amd64 2.42-4ubuntu2.10 [3552 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 gcc-13-cross-base all 13.3.0-6ubuntu2~24.04.1cross1 [46.5 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 gcc-14-cross-base all 14.2.0-4ubuntu2~24.04.1cross1 [46.1 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 libc6-armhf-cross all 2.39-0ubuntu8cross1 [1320 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgcc-s1-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [41.6 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgomp1-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [123 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libatomic1-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [7612 B]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libasan8-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [2900 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libstdc++6-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [664 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libubsan1-armhf-cross all 14.2.0-4ubuntu2~24.04.1cross1 [1153 kB]
+Get:17 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgcc-13-dev-armhf-cross all 13.3.0-6ubuntu2~24.04.1cross1 [899 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 gcc-13-arm-linux-gnueabihf amd64 13.3.0-6ubuntu2~24.04.1cross1 [19.6 MB]
+Get:19 http://archive.ubuntu.com/ubuntu noble/main amd64 gcc-arm-linux-gnueabihf amd64 4:13.2.0-7ubuntu1 [1230 B]
+Get:20 http://archive.ubuntu.com/ubuntu noble/main amd64 linux-libc-dev-armhf-cross all 6.8.0-25.25cross1 [1359 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble/main amd64 libc6-dev-armhf-cross all 2.39-0ubuntu8cross1 [1387 kB]
+Fetched 43.3 MB in 1min 20s (542 kB/s)                                   
+Selecting previously unselected package binutils-common:amd64.
+(Reading database ... 213903 files and directories currently installed.)
+Preparing to unpack .../00-binutils-common_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking binutils-common:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package gcc-13-arm-linux-gnueabihf-base:am
+d64.
+Preparing to unpack .../01-gcc-13-arm-linux-gnueabihf-base_13.3.0-6ubuntu2
+~24.04.1cross1_amd64.deb ...
+Unpacking gcc-13-arm-linux-gnueabihf-base:amd64 (13.3.0-6ubuntu2~24.04.1cr
+oss1) ...
+Selecting previously unselected package cpp-13-arm-linux-gnueabihf.
+Preparing to unpack .../02-cpp-13-arm-linux-gnueabihf_13.3.0-6ubuntu2~24.0
+4.1cross1_amd64.deb ...
+Unpacking cpp-13-arm-linux-gnueabihf (13.3.0-6ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package cpp-arm-linux-gnueabihf.
+Preparing to unpack .../03-cpp-arm-linux-gnueabihf_4%3a13.2.0-7ubuntu1_amd
+64.deb ...
+Unpacking cpp-arm-linux-gnueabihf (4:13.2.0-7ubuntu1) ...
+Selecting previously unselected package libcc1-0:amd64.
+Preparing to unpack .../04-libcc1-0_14.2.0-4ubuntu2~24.04.1_amd64.deb ...
+Unpacking libcc1-0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Selecting previously unselected package libsframe1:amd64.
+Preparing to unpack .../05-libsframe1_2.42-4ubuntu2.10_amd64.deb ...
+Unpacking libsframe1:amd64 (2.42-4ubuntu2.10) ...
+Selecting previously unselected package binutils-arm-linux-gnueabihf.
+Preparing to unpack .../06-binutils-arm-linux-gnueabihf_2.42-4ubuntu2.10_a
+md64.deb ...
+Unpacking binutils-arm-linux-gnueabihf (2.42-4ubuntu2.10) ...
+Selecting previously unselected package gcc-13-cross-base.
+Preparing to unpack .../07-gcc-13-cross-base_13.3.0-6ubuntu2~24.04.1cross1
+_all.deb ...
+Unpacking gcc-13-cross-base (13.3.0-6ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package gcc-14-cross-base.
+Preparing to unpack .../08-gcc-14-cross-base_14.2.0-4ubuntu2~24.04.1cross1
+_all.deb ...
+Unpacking gcc-14-cross-base (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libc6-armhf-cross.
+Preparing to unpack .../09-libc6-armhf-cross_2.39-0ubuntu8cross1_all.deb .
+..
+Unpacking libc6-armhf-cross (2.39-0ubuntu8cross1) ...
+Selecting previously unselected package libgcc-s1-armhf-cross.
+Preparing to unpack .../10-libgcc-s1-armhf-cross_14.2.0-4ubuntu2~24.04.1cr
+oss1_all.deb ...
+Unpacking libgcc-s1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libgomp1-armhf-cross.
+Preparing to unpack .../11-libgomp1-armhf-cross_14.2.0-4ubuntu2~24.04.1cro
+ss1_all.deb ...
+Unpacking libgomp1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libatomic1-armhf-cross.
+Preparing to unpack .../12-libatomic1-armhf-cross_14.2.0-4ubuntu2~24.04.1c
+ross1_all.deb ...
+Unpacking libatomic1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libasan8-armhf-cross.
+Preparing to unpack .../13-libasan8-armhf-cross_14.2.0-4ubuntu2~24.04.1cro
+ss1_all.deb ...
+Unpacking libasan8-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libstdc++6-armhf-cross.
+Preparing to unpack .../14-libstdc++6-armhf-cross_14.2.0-4ubuntu2~24.04.1c
+ross1_all.deb ...
+Unpacking libstdc++6-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libubsan1-armhf-cross.
+Preparing to unpack .../15-libubsan1-armhf-cross_14.2.0-4ubuntu2~24.04.1cr
+oss1_all.deb ...
+Unpacking libubsan1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package libgcc-13-dev-armhf-cross.
+Preparing to unpack .../16-libgcc-13-dev-armhf-cross_13.3.0-6ubuntu2~24.04
+.1cross1_all.deb ...
+Unpacking libgcc-13-dev-armhf-cross (13.3.0-6ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package gcc-13-arm-linux-gnueabihf.
+Preparing to unpack .../17-gcc-13-arm-linux-gnueabihf_13.3.0-6ubuntu2~24.0
+4.1cross1_amd64.deb ...
+Unpacking gcc-13-arm-linux-gnueabihf (13.3.0-6ubuntu2~24.04.1cross1) ...
+Selecting previously unselected package gcc-arm-linux-gnueabihf.
+Preparing to unpack .../18-gcc-arm-linux-gnueabihf_4%3a13.2.0-7ubuntu1_amd
+64.deb ...
+Unpacking gcc-arm-linux-gnueabihf (4:13.2.0-7ubuntu1) ...
+Selecting previously unselected package linux-libc-dev-armhf-cross.
+Preparing to unpack .../19-linux-libc-dev-armhf-cross_6.8.0-25.25cross1_al
+l.deb ...
+Unpacking linux-libc-dev-armhf-cross (6.8.0-25.25cross1) ...
+Selecting previously unselected package libc6-dev-armhf-cross.
+Preparing to unpack .../20-libc6-dev-armhf-cross_2.39-0ubuntu8cross1_all.d
+eb ...
+Unpacking libc6-dev-armhf-cross (2.39-0ubuntu8cross1) ...
+Setting up libc6-armhf-cross (2.39-0ubuntu8cross1) ...
+Setting up binutils-common:amd64 (2.42-4ubuntu2.10) ...
+Setting up gcc-14-cross-base (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up libatomic1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up libsframe1:amd64 (2.42-4ubuntu2.10) ...
+Setting up gcc-13-cross-base (13.3.0-6ubuntu2~24.04.1cross1) ...
+Setting up linux-libc-dev-armhf-cross (6.8.0-25.25cross1) ...
+Setting up gcc-13-arm-linux-gnueabihf-base:amd64 (13.3.0-6ubuntu2~24.04.1c
+ross1) ...
+Setting up binutils-arm-linux-gnueabihf (2.42-4ubuntu2.10) ...
+Setting up libcc1-0:amd64 (14.2.0-4ubuntu2~24.04.1) ...
+Setting up libgomp1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up cpp-13-arm-linux-gnueabihf (13.3.0-6ubuntu2~24.04.1cross1) ...
+Setting up libgcc-s1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up libc6-dev-armhf-cross (2.39-0ubuntu8cross1) ...
+Setting up libstdc++6-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up libubsan1-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up cpp-arm-linux-gnueabihf (4:13.2.0-7ubuntu1) ...
+Setting up libasan8-armhf-cross (14.2.0-4ubuntu2~24.04.1cross1) ...
+Setting up libgcc-13-dev-armhf-cross (13.3.0-6ubuntu2~24.04.1cross1) ...
+Setting up gcc-13-arm-linux-gnueabihf (13.3.0-6ubuntu2~24.04.1cross1) ...
+Setting up gcc-arm-linux-gnueabihf (4:13.2.0-7ubuntu1) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+ubuntu@ubuntu:~/embedded_lab2/driver$ arm-linux-gnueabihf-gcc --version
+arm-linux-gnueabihf-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ubuntu@ubuntu:~/embedded_lab2/driver$ cd ~/embedded_lab2/driver
+ubuntu@ubuntu:~/embedded_lab2/driver$ make
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- modules
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.o
+/tmp/cc9HGSmL.s: Assembler messages:
+/tmp/cc9HGSmL.s:347: Error: selected processor does not support `isb ' in ARM mode
+/tmp/cc9HGSmL.s:380: Error: selected processor does not support `isb ' in ARM mode
+/tmp/cc9HGSmL.s:661: Error: selected processor does not support `isb ' in ARM mode
+/tmp/cc9HGSmL.s:698: Error: selected processor does not support `isb ' in ARM mode
+make[2]: *** [scripts/Makefile.build:277: /home/ubuntu/embedded_lab2/driver/lab2_driver.o] Error 1
+make[1]: *** [Makefile:1868: /home/ubuntu/embedded_lab2/driver] Error 2
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+make: *** [Makefile:8: all] Error 2
+ubuntu@ubuntu:~/embedded_lab2/driver$ cd ~/embedded_lab2/driver
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano Makefile
+ubuntu@ubuntu:~/embedded_lab2/driver$ make clean
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- clean
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+ubuntu@ubuntu:~/embedded_lab2/driver$ make
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- KCFLAGS="-march=armv7-a" modules
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.o
+  MODPOST /home/ubuntu/embedded_lab2/driver/Module.symvers
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.mod.o
+  LD [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.ko
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh lab2_driver.ko
+-rw-rw-r-- 1 ubuntu ubuntu 133K Oct  7 22:23 lab2_driver.ko
+ubuntu@ubuntu:~/embedded_lab2/driver$ file lab2_driver.ko
+lab2_driver.ko: ELF 32-bit LSB relocatable, ARM, EABI5 version 1 (SYSV), BuildID[sha1]=003d99e41ff1b7d79c61edf2c200b77098e99e8d, with debug_info, not stripped
+ubuntu@ubuntu:~/embedded_lab2/driver$ modinfo lab2_driver.ko | grep vermagic
+vermagic:       5.15.0 SMP mod_unload ARMv7 p2v8 
+ubuntu@ubuntu:~/embedded_lab2/driver$ mkdir -p ~/embedded_lab2/rootfs/initramfs/lib/modules/5.15.0
+ubuntu@ubuntu:~/embedded_lab2/driver$ cp ~/embedded_lab2/driver/lab2_driver.ko \
+~/embedded_lab2/rootfs/initramfs/lib/modules/5.15.0/
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh ~/embedded_lab2/rootfs/initramfs/lib/modules/5.15.0/
+total 136K
+-rw-rw-r-- 1 ubuntu ubuntu 133K Oct  7 22:26 lab2_driver.ko
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ chmod +x ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+-rwxrwxr-x 1 ubuntu ubuntu 743 Oct  7 22:26 /home/ubuntu/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/driver/lab2_driver.c
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/driver/lab2_driver.c
+ubuntu@ubuntu:~/embedded_lab2/driver$ cd ~/embedded_lab2/driver
+make clean
+make
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- clean
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+  CLEAN   /home/ubuntu/embedded_lab2/driver/Module.symvers
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+make -C /home/ubuntu/embedded_lab1/kernel/linux-5.15 M=/home/ubuntu/embedded_lab2/driver ARCH=arm \
+	CROSS_COMPILE=arm-linux-gnueabihf- KCFLAGS="-march=armv7-a" modules
+make[1]: Entering directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.o
+  MODPOST /home/ubuntu/embedded_lab2/driver/Module.symvers
+  CC [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.mod.o
+  LD [M]  /home/ubuntu/embedded_lab2/driver/lab2_driver.ko
+make[1]: Leaving directory '/home/ubuntu/embedded_lab1/kernel/linux-5.15'
+ubuntu@ubuntu:~/embedded_lab2/driver$ cp lab2_driver.ko \
+~/embedded_lab2/rootfs/initramfs/lib/modules/5.15.0/
+ubuntu@ubuntu:~/embedded_lab2/driver$ file lab2_driver.ko
+modinfo lab2_driver.ko | grep vermagic
+lab2_driver.ko: ELF 32-bit LSB relocatable, ARM, EABI5 version 1 (SYSV), BuildID[sha1]=6cb64ffac0214e944860647cc6391eb9c06b1b56, with debug_info, not stripped
+vermagic:       5.15.0 SMP mod_unload ARMv7 p2v8 
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ chmod +x ~/embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh ~/embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh
+-rwxrwxr-x 1 ubuntu ubuntu 471 Oct  7 22:44 /home/ubuntu/embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo modprobe nandsim first_id_byte=0x20 second_id_byte=0x35
+sudo modprobe mtdblock
+sudo modprobe jffs2
+ubuntu@ubuntu:~/embedded_lab2/driver$ cat /proc/mtd
+ls /dev/mtd*
+ls /dev/mtdblock*
+dev:    size   erasesize  name
+mtd0: 02000000 00001000 "BIOS"
+mtd1: 02000000 00004000 "NAND simulator partition 0"
+/dev/mtd0  /dev/mtd0ro  /dev/mtd1  /dev/mtd1ro  /dev/mtdblock0  /dev/mtdblock1
+
+/dev/mtd:
+by-name
+/dev/mtdblock0  /dev/mtdblock1
+ubuntu@ubuntu:~/embedded_lab2/driver$ cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 02000000 00001000 "BIOS"
+mtd1: 02000000 00004000 "NAND simulator partition 0"
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo mtdinfo /dev/mtd1
+mtd1
+Name:                           NAND simulator partition 0
+Type:                           nand
+Eraseblock size:                16384 bytes, 16.0 KiB
+Amount of eraseblocks:          2048 (33554432 bytes, 32.0 MiB)
+Minimum input/output unit size: 512 bytes
+Sub-page size:                  256 bytes
+OOB size:                       16 bytes
+Character device major/minor:   90:2
+Bad blocks are allowed:         true
+Device is writable:             true
+
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo flash_erase /dev/mtd1 0 0
+Erasing 32768 Kibyte @ 0 -- 100 % complete 
+ubuntu@ubuntu:~/embedded_lab2/driver$ mkdir -p /tmp/jffs2_data/logs
+echo 'Hello from JFFS2!' > /tmp/jffs2_data/hello.txt
+echo 'Embedded Linux Lab2' > /tmp/jffs2_data/info.txt
+date > /tmp/jffs2_data/logs/boot.log
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo mkfs.jffs2 \
+ --root=/tmp/jffs2_data \
+ --eraseblock=0x4000 \
+ --output=/tmp/rootfs.jffs2 \
+ --pad \
+ --no-cleanmarkers
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh /tmp/rootfs.jffs2
+-rw-r--r-- 1 root root 16K Oct  7 22:46 /tmp/rootfs.jffs2
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo nandwrite -p /dev/mtd1 /tmp/rootfs.jffs2
+Writing data to block 0 at offset 0x0
+Written 30 blocks containing only 0xff bytes
+Those block may be incorrectly treated as empty!
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo mkdir -p /mnt/jffs2
+sudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -la /mnt/jffs2/
+cat /mnt/jffs2/hello.txt
+cat /mnt/jffs2/info.txt
+cat /mnt/jffs2/logs/boot.log
+total 1
+drwxr-xr-x 4 root   root    0 Jan  1  1970 .
+drwxr-xr-x 1 root   root   60 Oct  7 22:46 ..
+-rw-rw-r-- 1 ubuntu ubuntu 18 Oct  7 22:46 hello.txt
+-rw-rw-r-- 1 ubuntu ubuntu 20 Oct  7 22:46 info.txt
+drwxrwxr-x 2 ubuntu ubuntu  0 Oct  7 22:46 logs
+Hello from JFFS2!
+Embedded Linux Lab2
+Wed Oct  7 22:46:14 UTC 2026
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo sh -c 'echo "Written at $(date)" >> /mnt/jffs2/logs/boot.log'
+sudo sh -c 'echo "New runtime file" > /mnt/jffs2/runtime.txt'
+ubuntu@ubuntu:~/embedded_lab2/driver$ cat /mnt/jffs2/logs/boot.log
+cat /mnt/jffs2/runtime.txt
+Wed Oct  7 22:46:14 UTC 2026
+Written at Wed Oct  7 22:46:53 UTC 2026
+New runtime file
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo umount /mnt/jffs2
+sudo mount -t jffs2 /dev/mtdblock1 /mnt/jffs2
+cat /mnt/jffs2/logs/boot.log
+cat /mnt/jffs2/runtime.txt
+Wed Oct  7 22:46:14 UTC 2026
+Written at Wed Oct  7 22:46:53 UTC 2026
+New runtime file
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo umount /mnt/jffs2
+sudo nanddump -o -l 512 /dev/mtd1 /tmp/dump.bin
+hexdump -C /tmp/dump.bin | head -20
+Usage: nanddump [OPTIONS] MTD-device
+Dumps the contents of a nand mtd partition.
+
+-h         --help               Display this help and exit
+           --version            Output version information and exit
+           --bb=METHOD          Choose bad block handling method (see below).
+-a         --forcebinary        Force printing of binary data to tty
+-c         --canonicalprint     Print canonical Hex+ASCII dump
+-f file    --file=file          Dump to file
+-l length  --length=length      Length
+-n         --noecc              Read without error correction
+           --omitoob            Omit OOB data (default)
+-o         --oob                Dump OOB data
+-p         --prettyprint        Print nice (hexdump)
+-q         --quiet              Don't display progress and status messages
+-s addr    --startaddress=addr  Start address
+           --skip-bad-blocks-to-start
+                                Skip bad blocks when seeking to the start address
+
+--bb=METHOD, where METHOD can be `padbad', `dumpbad', or `skipbad':
+    padbad:  dump flash data, substituting 0xFF for any bad blocks
+    dumpbad: dump flash data, including any bad blocks
+    skipbad: dump good data, completely skipping any bad blocks (default)
+hexdump: /tmp/dump.bin: No such file or directory
+hexdump: all input file arguments failed
+ubuntu@ubuntu:~/embedded_lab2/driver$ sudo nanddump -o -l 512 -f /tmp/dump.bin /dev/mtd1
+ECC failed: 0
+ECC corrected: 0
+Number of bad blocks: 0
+Number of bbt blocks: 0
+Block size 16384, page size 512, OOB size 16
+Dumping data starting at 0x00000000 and ending at 0x00000200...
+ubuntu@ubuntu:~/embedded_lab2/driver$ ls -lh /tmp/dump.bin
+-rw-r--r-- 1 root root 528 Oct  7 22:48 /tmp/dump.bin
+ubuntu@ubuntu:~/embedded_lab2/driver$ hexdump -C /tmp/dump.bin | head -20
+00000000  85 19 01 e0 31 00 00 00  1d d9 82 42 01 00 00 00  |....1......B....|
+00000010  00 00 00 00 02 00 00 00  b6 cb c6 6a 09 08 00 00  |...........j....|
+00000020  ff 3d f7 30 15 da 69 f4  68 65 6c 6c 6f 2e 74 78  |.=.0..i.hello.tx|
+00000030  74 ff ff ff 85 19 02 e0  56 00 00 00 09 64 e7 62  |t.......V....d.b|
+00000040  02 00 00 00 01 00 00 00  b4 81 00 00 e8 03 e8 03  |................|
+00000050  12 00 00 00 b6 cb c6 6a  b6 cb c6 6a b6 cb c6 6a  |.......j...j...j|
+00000060  00 00 00 00 12 00 00 00  12 00 00 00 00 00 00 00  |................|
+00000070  ee dd 4b b3 73 72 06 84  48 65 6c 6c 6f 20 66 72  |..K.sr..Hello fr|
+00000080  6f 6d 20 4a 46 46 53 32  21 0a ff ff 85 19 01 e0  |om JFFS2!.......|
+00000090  30 00 00 00 78 be 3e fa  01 00 00 00 01 00 00 00  |0...x.>.........|
+000000a0  03 00 00 00 b6 cb c6 6a  08 08 00 00 64 87 86 bd  |.......j....d...|
+000000b0  a9 de 79 72 69 6e 66 6f  2e 74 78 74 85 19 02 e0  |..yrinfo.txt....|
+000000c0  58 00 00 00 3a 13 38 82  03 00 00 00 01 00 00 00  |X...:.8.........|
+000000d0  b4 81 00 00 e8 03 e8 03  14 00 00 00 b6 cb c6 6a  |...............j|
+000000e0  b6 cb c6 6a b6 cb c6 6a  00 00 00 00 14 00 00 00  |...j...j........|
+000000f0  14 00 00 00 00 00 00 00  8a 74 43 dd f7 25 aa d9  |.........tC..%..|
+00000100  45 6d 62 65 64 64 65 64  20 4c 69 6e 75 78 20 4c  |Embedded Linux L|
+00000110  61 62 32 0a 85 19 01 e0  2c 00 00 00 5f 56 f1 e0  |ab2.....,..._V..|
+00000120  01 00 00 00 02 00 00 00  04 00 00 00 b6 cb c6 6a  |...............j|
+00000130  04 04 00 00 c5 9c 1a a3  40 19 cb d1 6c 6f 67 73  |........@...logs|
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/rootfs/initramfs/etc/init.d/rcS
+ubuntu@ubuntu:~/embedded_lab2/driver$ chmod +x ~/embedded_lab2/rootfs/initramfs/etc/init.d/rcS
+ubuntu@ubuntu:~/embedded_lab2/driver$ nano ~/embedded_lab2/rootfs/initramfs/etc/inittab
+ubuntu@ubuntu:~/embedded_lab2/driver$ cd ~/embedded_lab2/rootfs/initramfs
+
+ls -la lib/modules/5.15.0/lab2_driver.ko
+ls -la usr/bin/test_driver.sh usr/bin/test_procfs.sh
+ls -la etc/inittab etc/init.d/rcS
+file lib/modules/5.15.0/lab2_driver.ko
+-rw-rw-r-- 1 ubuntu ubuntu 142436 Oct  7 22:44 lib/modules/5.15.0/lab2_driver.ko
+-rwxrwxr-x 1 ubuntu ubuntu 743 Oct  7 22:26 usr/bin/test_driver.sh
+-rwxrwxr-x 1 ubuntu ubuntu 471 Oct  7 22:44 usr/bin/test_procfs.sh
+-rwxr-xr-x 1 ubuntu ubuntu 1118 Oct  7 22:49 etc/init.d/rcS
+-rw-r--r-- 1 ubuntu ubuntu  150 Oct  7 22:14 etc/inittab
+lib/modules/5.15.0/lab2_driver.ko: ELF 32-bit LSB relocatable, ARM, EABI5 version 1 (SYSV), BuildID[sha1]=6cb64ffac0214e944860647cc6391eb9c06b1b56, with debug_info, not stripped
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ find . | cpio -H newc -o | gzip > \
+~/embedded_lab2/output/initramfs_lab2.cpio.gz
+3388 blocks
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ ls -lh ~/embedded_lab2/output/initramfs_lab2.cpio.gz
+-rw-rw-r-- 1 ubuntu ubuntu 1.1M Oct  7 22:50 /home/ubuntu/embedded_lab2/output/initramfs_lab2.cpio.gz
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ qemu-system-arm \
+-M vexpress-a9 \
+-cpu cortex-a9 \
+-m 512M \
+-smp 2 \
+-nographic \
+-kernel ~/embedded_lab1/output/zImage \
+-dtb ~/embedded_lab1/output/vexpress-v2p-ca9.dtb \
+-initrd ~/embedded_lab2/output/initramfs_lab2.cpio.gz \
+-append 'console=ttyAMA0,115200 rdinit=/sbin/init mem=512M'
+Command 'qemu-system-arm' not found, but can be installed with:
+sudo apt install qemu-system-arm
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ sudo apt update
+sudo apt install -y qemu-system-arm
+Ign:1 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble InRelease
+Hit:2 cdrom://Ubuntu 24.04.5 LTS _Noble Numbat_ - Release amd64 (20260914) noble Release
+Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease                     
+Get:5 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:8 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1073 kB]                
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main i386 Packages [564 kB]                    
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1375 kB]                 
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main Translation-en [306 kB]                  
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [181 kB]                
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]             
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/universe i386 Packages [1148 kB]              
+Get:15 http://archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [341 kB]              
+Get:16 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]            
+Get:17 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1730 kB]         
+Get:18 http://archive.ubuntu.com/ubuntu noble-updates/restricted i386 Packages [29.9 kB]            
+Get:19 http://archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [396 kB]            
+Get:20 http://archive.ubuntu.com/ubuntu noble-updates/multiverse i386 Packages [12.7 kB]        
+Get:21 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [45.7 kB]   
+Get:22 http://archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [13.3 kB]           
+Get:23 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]           
+Get:24 http://archive.ubuntu.com/ubuntu noble-backports/main i386 Packages [33.1 kB]                
+Get:25 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [40.6 kB]               
+Get:26 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5752 B]              
+Get:27 http://archive.ubuntu.com/ubuntu noble-backports/universe i386 Packages [17.1 kB]            
+Get:28 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [31.0 kB]           
+Get:29 http://archive.ubuntu.com/ubuntu noble-backports/universe Translation-en [18.6 kB]           
+Get:30 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]         
+Get:31 http://archive.ubuntu.com/ubuntu noble-backports/universe Icons (48x48) [27.0 kB]            
+Get:32 http://archive.ubuntu.com/ubuntu noble-backports/universe Icons (64x64) [37.1 kB]            
+Get:33 http://security.ubuntu.com/ubuntu noble-security/main i386 Packages [371 kB]                 
+Get:34 http://security.ubuntu.com/ubuntu noble-security/main Translation-en [223 kB]                
+Get:35 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]             
+Get:36 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1218 kB]           
+Get:37 http://security.ubuntu.com/ubuntu noble-security/universe i386 Packages [835 kB]             
+Get:38 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [245 kB]            
+Get:39 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]         
+Get:40 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1566 kB]         
+Get:41 http://security.ubuntu.com/ubuntu noble-security/restricted Translation-en [361 kB]          
+Get:42 http://security.ubuntu.com/ubuntu noble-security/multiverse Translation-en [11.6 kB]         
+Fetched 14.9 MB in 44s (340 kB/s)                                                                   
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+173 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  ipxe-qemu ipxe-qemu-256k-compat-efi-roms libcacard0 libdaxctl1 libfdt1 libiscsi7 libjack-jackd2-0
+  libndctl6 libpmem1 libpmemobj1 librados2 librbd1 librdmacm1t64 libsdl2-2.0-0 libslirp0
+  libspice-server1 liburing2 libusbredirparser1t64 libvirglrenderer1 qemu-block-extra
+  qemu-efi-aarch64 qemu-efi-arm qemu-system-common qemu-system-data qemu-system-gui
+  qemu-system-modules-opengl qemu-system-modules-spice qemu-utils
+Suggested packages:
+  jackd2 gstreamer1.0-libav gstreamer1.0-plugins-ugly samba vde2
+The following NEW packages will be installed:
+  ipxe-qemu ipxe-qemu-256k-compat-efi-roms libcacard0 libdaxctl1 libfdt1 libiscsi7 libjack-jackd2-0
+  libndctl6 libpmem1 libpmemobj1 librados2 librbd1 librdmacm1t64 libsdl2-2.0-0 libslirp0
+  libspice-server1 liburing2 libusbredirparser1t64 libvirglrenderer1 qemu-block-extra
+  qemu-efi-aarch64 qemu-efi-arm qemu-system-arm qemu-system-common qemu-system-data qemu-system-gui
+  qemu-system-modules-opengl qemu-system-modules-spice qemu-utils
+0 upgraded, 29 newly installed, 0 to remove and 173 not upgraded.
+Need to get 33.5 MB of archives.
+After this operation, 607 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 ipxe-qemu all 1.21.1+git-20220113.fbbdc3926-0ubuntu2 [1565 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 ipxe-qemu-256k-compat-efi-roms all 1.0.0+git-20150424.a25a16d-0ubuntu5 [548 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 libcacard0 amd64 1:2.8.0-3build4 [36.5 kB]  
+Get:4 http://archive.ubuntu.com/ubuntu noble/main amd64 libdaxctl1 amd64 77-2ubuntu2 [21.4 kB]      
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 librdmacm1t64 amd64 50.0-2ubuntu0.2 [70.7 kB]
+Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 libiscsi7 amd64 1.19.0-3build4 [68.7 kB]    
+Get:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libjack-jackd2-0 amd64 1.9.21~dfsg-3ubuntu3 [289 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble/main amd64 libndctl6 amd64 77-2ubuntu2 [62.8 kB]       
+Get:9 http://archive.ubuntu.com/ubuntu noble/main amd64 libpmem1 amd64 1.13.1-1.1ubuntu2 [84.8 kB]  
+Get:10 http://archive.ubuntu.com/ubuntu noble/main amd64 libpmemobj1 amd64 1.13.1-1.1ubuntu2 [116 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 librados2 amd64 19.2.3-0ubuntu0.24.04.3 [4041 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 librbd1 amd64 19.2.3-0ubuntu0.24.04.3 [3413 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsdl2-2.0-0 amd64 2.30.0+dfsg-1ubuntu3.1 [686 kB]
+Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libslirp0 amd64 4.7.0-1ubuntu3.1 [63.8 kB]
+Get:15 http://archive.ubuntu.com/ubuntu noble/main amd64 libspice-server1 amd64 0.15.1-1build2 [349 kB]
+Get:16 http://archive.ubuntu.com/ubuntu noble/main amd64 liburing2 amd64 2.5-1build1 [21.1 kB]      
+Get:17 http://archive.ubuntu.com/ubuntu noble/main amd64 libusbredirparser1t64 amd64 0.13.0-2.1build1 [16.5 kB]
+Get:18 http://archive.ubuntu.com/ubuntu noble/main amd64 libvirglrenderer1 amd64 1.0.0-1ubuntu2 [226 kB]
+Get:19 http://archive.ubuntu.com/ubuntu noble/main amd64 libfdt1 amd64 1.7.0-2build1 [20.1 kB]      
+Get:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-common amd64 1:8.2.2+ds-0ubuntu1.18 [1255 kB]
+Get:21 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-data all 1:8.2.2+ds-0ubuntu1.18 [1796 kB]
+Get:22 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-arm amd64 1:8.2.2+ds-0ubuntu1.18 [11.0 MB]
+Get:23 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-utils amd64 1:8.2.2+ds-0ubuntu1.18 [2221 kB]
+Get:24 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-block-extra amd64 1:8.2.2+ds-0ubuntu1.18 [114 kB]
+Get:25 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-modules-opengl amd64 1:8.2.2+ds-0ubuntu1.18 [186 kB]
+Get:26 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-gui amd64 1:8.2.2+ds-0ubuntu1.18 [312 kB]
+Get:27 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-system-modules-spice amd64 1:8.2.2+ds-0ubuntu1.18 [70.2 kB]
+Get:28 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-efi-aarch64 all 2024.02-2ubuntu0.10 [4115 kB]
+Get:29 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 qemu-efi-arm all 2024.02-2ubuntu0.10 [777 kB]
+Fetched 33.5 MB in 4min 19s (129 kB/s)                                                              
+Selecting previously unselected package ipxe-qemu.
+(Reading database ... 215801 files and directories currently installed.)
+Preparing to unpack .../00-ipxe-qemu_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb ...
+Unpacking ipxe-qemu (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Selecting previously unselected package ipxe-qemu-256k-compat-efi-roms.
+Preparing to unpack .../01-ipxe-qemu-256k-compat-efi-roms_1.0.0+git-20150424.a25a16d-0ubuntu5_all.deb
+ ...
+Unpacking ipxe-qemu-256k-compat-efi-roms (1.0.0+git-20150424.a25a16d-0ubuntu5) ...
+Selecting previously unselected package libcacard0:amd64.
+Preparing to unpack .../02-libcacard0_1%3a2.8.0-3build4_amd64.deb ...
+Unpacking libcacard0:amd64 (1:2.8.0-3build4) ...
+Selecting previously unselected package libdaxctl1:amd64.
+Preparing to unpack .../03-libdaxctl1_77-2ubuntu2_amd64.deb ...
+Unpacking libdaxctl1:amd64 (77-2ubuntu2) ...
+Selecting previously unselected package librdmacm1t64:amd64.
+Preparing to unpack .../04-librdmacm1t64_50.0-2ubuntu0.2_amd64.deb ...
+Unpacking librdmacm1t64:amd64 (50.0-2ubuntu0.2) ...
+Selecting previously unselected package libiscsi7:amd64.
+Preparing to unpack .../05-libiscsi7_1.19.0-3build4_amd64.deb ...
+Unpacking libiscsi7:amd64 (1.19.0-3build4) ...
+Selecting previously unselected package libjack-jackd2-0:amd64.
+Preparing to unpack .../06-libjack-jackd2-0_1.9.21~dfsg-3ubuntu3_amd64.deb ...
+Unpacking libjack-jackd2-0:amd64 (1.9.21~dfsg-3ubuntu3) ...
+Selecting previously unselected package libndctl6:amd64.
+Preparing to unpack .../07-libndctl6_77-2ubuntu2_amd64.deb ...
+Unpacking libndctl6:amd64 (77-2ubuntu2) ...
+Selecting previously unselected package libpmem1:amd64.
+Preparing to unpack .../08-libpmem1_1.13.1-1.1ubuntu2_amd64.deb ...
+Unpacking libpmem1:amd64 (1.13.1-1.1ubuntu2) ...
+Selecting previously unselected package libpmemobj1:amd64.
+Preparing to unpack .../09-libpmemobj1_1.13.1-1.1ubuntu2_amd64.deb ...
+Unpacking libpmemobj1:amd64 (1.13.1-1.1ubuntu2) ...
+Selecting previously unselected package librados2.
+Preparing to unpack .../10-librados2_19.2.3-0ubuntu0.24.04.3_amd64.deb ...
+Unpacking librados2 (19.2.3-0ubuntu0.24.04.3) ...
+Selecting previously unselected package librbd1.
+Preparing to unpack .../11-librbd1_19.2.3-0ubuntu0.24.04.3_amd64.deb ...
+Unpacking librbd1 (19.2.3-0ubuntu0.24.04.3) ...
+Selecting previously unselected package libsdl2-2.0-0:amd64.
+Preparing to unpack .../12-libsdl2-2.0-0_2.30.0+dfsg-1ubuntu3.1_amd64.deb ...
+Unpacking libsdl2-2.0-0:amd64 (2.30.0+dfsg-1ubuntu3.1) ...
+Selecting previously unselected package libslirp0:amd64.
+Preparing to unpack .../13-libslirp0_4.7.0-1ubuntu3.1_amd64.deb ...
+Unpacking libslirp0:amd64 (4.7.0-1ubuntu3.1) ...
+Selecting previously unselected package libspice-server1:amd64.
+Preparing to unpack .../14-libspice-server1_0.15.1-1build2_amd64.deb ...
+Unpacking libspice-server1:amd64 (0.15.1-1build2) ...
+Selecting previously unselected package liburing2:amd64.
+Preparing to unpack .../15-liburing2_2.5-1build1_amd64.deb ...
+Unpacking liburing2:amd64 (2.5-1build1) ...
+Selecting previously unselected package libusbredirparser1t64:amd64.
+Preparing to unpack .../16-libusbredirparser1t64_0.13.0-2.1build1_amd64.deb ...
+Unpacking libusbredirparser1t64:amd64 (0.13.0-2.1build1) ...
+Selecting previously unselected package libvirglrenderer1:amd64.
+Preparing to unpack .../17-libvirglrenderer1_1.0.0-1ubuntu2_amd64.deb ...
+Unpacking libvirglrenderer1:amd64 (1.0.0-1ubuntu2) ...
+Selecting previously unselected package libfdt1:amd64.
+Preparing to unpack .../18-libfdt1_1.7.0-2build1_amd64.deb ...
+Unpacking libfdt1:amd64 (1.7.0-2build1) ...
+Selecting previously unselected package qemu-system-common.
+Preparing to unpack .../19-qemu-system-common_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-system-common (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-system-data.
+Preparing to unpack .../20-qemu-system-data_1%3a8.2.2+ds-0ubuntu1.18_all.deb ...
+Unpacking qemu-system-data (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-system-arm.
+Preparing to unpack .../21-qemu-system-arm_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-system-arm (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-utils.
+Preparing to unpack .../22-qemu-utils_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-utils (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-block-extra.
+Preparing to unpack .../23-qemu-block-extra_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-block-extra (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-system-modules-opengl.
+Preparing to unpack .../24-qemu-system-modules-opengl_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-system-modules-opengl (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-system-gui.
+Preparing to unpack .../25-qemu-system-gui_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-system-gui (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-system-modules-spice.
+Preparing to unpack .../26-qemu-system-modules-spice_1%3a8.2.2+ds-0ubuntu1.18_amd64.deb ...
+Unpacking qemu-system-modules-spice (1:8.2.2+ds-0ubuntu1.18) ...
+Selecting previously unselected package qemu-efi-aarch64.
+Preparing to unpack .../27-qemu-efi-aarch64_2024.02-2ubuntu0.10_all.deb ...
+Unpacking qemu-efi-aarch64 (2024.02-2ubuntu0.10) ...
+Selecting previously unselected package qemu-efi-arm.
+Preparing to unpack .../28-qemu-efi-arm_2024.02-2ubuntu0.10_all.deb ...
+Unpacking qemu-efi-arm (2024.02-2ubuntu0.10) ...
+Setting up libspice-server1:amd64 (0.15.1-1build2) ...
+Setting up libfdt1:amd64 (1.7.0-2build1) ...
+Setting up qemu-efi-aarch64 (2024.02-2ubuntu0.10) ...
+Setting up libcacard0:amd64 (1:2.8.0-3build4) ...
+Setting up libvirglrenderer1:amd64 (1.0.0-1ubuntu2) ...
+Setting up libdaxctl1:amd64 (77-2ubuntu2) ...
+Setting up qemu-system-data (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up libjack-jackd2-0:amd64 (1.9.21~dfsg-3ubuntu3) ...
+Setting up libslirp0:amd64 (4.7.0-1ubuntu3.1) ...
+Setting up libusbredirparser1t64:amd64 (0.13.0-2.1build1) ...
+Setting up ipxe-qemu (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Setting up qemu-efi-arm (2024.02-2ubuntu0.10) ...
+Setting up libndctl6:amd64 (77-2ubuntu2) ...
+Setting up librdmacm1t64:amd64 (50.0-2ubuntu0.2) ...
+Setting up ipxe-qemu-256k-compat-efi-roms (1.0.0+git-20150424.a25a16d-0ubuntu5) ...
+Setting up liburing2:amd64 (2.5-1build1) ...
+Setting up libiscsi7:amd64 (1.19.0-3build4) ...
+Setting up libsdl2-2.0-0:amd64 (2.30.0+dfsg-1ubuntu3.1) ...
+Setting up libpmem1:amd64 (1.13.1-1.1ubuntu2) ...
+Setting up librados2 (19.2.3-0ubuntu0.24.04.3) ...
+Setting up qemu-system-common (1:8.2.2+ds-0ubuntu1.18) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/qemu-kvm.service → /usr/lib/systemd/syste
+m/qemu-kvm.service.
+Setting up libpmemobj1:amd64 (1.13.1-1.1ubuntu2) ...
+Setting up librbd1 (19.2.3-0ubuntu0.24.04.3) ...
+Setting up qemu-system-arm (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up qemu-utils (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up qemu-block-extra (1:8.2.2+ds-0ubuntu1.18) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/run-qemu.mount → /usr/lib/systemd/system/
+run-qemu.mount.
+Setting up qemu-system-modules-opengl (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up qemu-system-gui (1:8.2.2+ds-0ubuntu1.18) ...
+Setting up qemu-system-modules-spice (1:8.2.2+ds-0ubuntu1.18) ...
+Processing triggers for hicolor-icon-theme (0.17-2) ...
+Processing triggers for gnome-menus (3.36.0-1.1ubuntu3) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for desktop-file-utils (0.27-2build1) ...
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ qemu-system-arm --version
+QEMU emulator version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)
+Copyright (c) 2003-2023 Fabrice Bellard and the QEMU Project developers
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ qemu-system-arm \
+-M vexpress-a9 \
+-cpu cortex-a9 \
+-m 512M \
+-smp 2 \
+-nographic \
+-kernel ~/embedded_lab1/output/zImage \
+-dtb ~/embedded_lab1/output/vexpress-v2p-ca9.dtb \
+-initrd ~/embedded_lab2/output/initramfs_lab2.cpio.gz \
+-append 'console=ttyAMA0,115200 rdinit=/sbin/init mem=512M'
+Booting Linux on physical CPU 0x0
+Linux version 5.15.0 (ubuntu@ubuntu) (arm-linux-gnueabihf-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #1 SMP Mon Oct 5 03:44:02 UTC 2026
+CPU: ARMv7 Processor [410fc090] revision 0 (ARMv7), cr=10c5387d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT nonaliasing instruction cache
+OF: fdt: Machine model: V2P-CA9
+Memory policy: Data cache writealloc
+Reserved memory: created DMA memory pool at 0x4c000000, size 8 MiB
+OF: reserved mem: initialized node vram@4c000000, compatible id shared-dma-pool
+cma: Reserved 16 MiB at 0x7f000000
+Zone ranges:
+  Normal   [mem 0x0000000060000000-0x000000007fffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000060000000-0x000000007fffffff]
+Initmem setup node 0 [mem 0x0000000060000000-0x000000007fffffff]
+percpu: Embedded 15 pages/cpu s30156 r8192 d23092 u61440
+Built 1 zonelists, mobility grouping on.  Total pages: 130048
+Kernel command line: console=ttyAMA0,115200 rdinit=/sbin/init mem=512M
+printk: log_buf_len individual max cpu contribution: 4096 bytes
+printk: log_buf_len total cpu_extra contributions: 12288 bytes
+printk: log_buf_len min size: 16384 bytes
+printk: log_buf_len: 32768 bytes
+printk: early log buf free: 14992(91%)
+Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+Memory: 489768K/524288K available (8192K kernel code, 593K rwdata, 1764K rodata, 1024K init, 151K bss, 18136K reserved, 16384K cma-reserved)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+trace event string verifier disabled
+rcu: Hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+L2C: platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C: DT/platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C-310 enabling early BRESP for Cortex-A9
+L2C-310 full line of zeros enabled for Cortex-A9
+L2C-310 dynamic clock gating disabled, standby mode disabled
+L2C-310 cache controller enabled, 8 ways, 128 kB
+L2C-310: CACHE_ID 0x410000c8, AUX_CTRL 0x46420001
+random: get_random_bytes called from start_kernel+0x4fc/0x6b0 with crng_init=0
+sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
+Failed to initialize '/bus@40000000/motherboard-bus@40000000/iofpga@7,00000000/timer@12000': -22
+smp_twd: clock not found -2
+Console: colour dummy device 80x30
+Calibrating local timer... 96.05MHz.
+Calibrating delay loop... 1849.75 BogoMIPS (lpj=9248768)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+CPU: Testing write buffer coherency: ok
+CPU0: Spectre v2: using BPIALL workaround
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+Setting up static identity map for 0x60100000 - 0x60100060
+rcu: Hierarchical SRCU implementation.
+smp: Bringing up secondary CPUs ...
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+CPU1: Spectre v2: using BPIALL workaround
+CPU2: failed to boot: -38
+CPU3: failed to boot: -38
+smp: Brought up 1 node, 2 CPUs
+SMP: Total of 2 processors activated (3765.04 BogoMIPS).
+CPU: All CPU(s) started in SVC mode.
+devtmpfs: initialized
+VFP support v0.3: implementor 41 architecture 3 part 30 variant 9 rev 0
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+cpuidle: using governor ladder
+hw-breakpoint: debug architecture 0x4 unsupported.
+Serial: AMBA PL011 UART driver
+irq: type mismatch, failed to map hwirq-75 for interrupt-controller@1e001000!
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+Advanced Linux Sound Architecture Driver Initialized.
+clocksource: Switched to clocksource arm,sp804
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 6144 bytes, linear)
+TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+TCP bind hash table entries: 4096 (order: 3, 32768 bytes, linear)
+TCP: Hash tables configured (established 4096 bind 4096)
+UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+Unpacking initramfs...
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+workingset: timestamp_bits=30 max_order=17 bucket_order=0
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+9p: Installing v9fs 9p2000 file system support
+io scheduler mq-deadline registered
+io scheduler kyber registered
+sii902x 0-0060: supply iovcc not found, using dummy regulator
+sii902x 0-0060: supply cvcc12 not found, using dummy regulator
+Freeing initrd memory: 1112K
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x40000000-0x43ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x44000000-0x47ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+Concatenating MTD devices:
+(0): "40000000.flash"
+(1): "40000000.flash"
+into device "40000000.flash"
+physmap-flash 48000000.psram: physmap platform flash device: [mem 0x48000000-0x49ffffff]
+libphy: Fixed MDIO Bus: probed
+libphy: smsc911x-mdio: probed
+smsc911x 4e000000.ethernet eth0: MAC Address: 52:54:00:12:34:56
+isp1760 4f000000.usb: isp1760 bus width: 32, oc: digital
+isp1760 4f000000.usb: NXP ISP1760 USB Host Controller
+isp1760 4f000000.usb: new USB bus registered, assigned bus number 1
+isp1760 4f000000.usb: Scratch test failed. 0x00000000
+isp1760 4f000000.usb: can't setup: -19
+isp1760 4f000000.usb: USB bus 1 deregistered
+usbcore: registered new interface driver usb-storage
+ledtrig-cpu: registered to indicate activity on CPUs
+usbcore: registered new interface driver usbhid
+usbhid: USB HID core driver
+NET: Registered PF_PACKET protocol family
+9pnet: Installing 9P2000 support
+Registering SWP/SWPB emulation handler
+aaci-pl041 10004000.aaci: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+aaci-pl041 10004000.aaci: FIFO 512 entries
+mmci-pl18x 10005000.mmci: Got CD GPIO
+mmci-pl18x 10005000.mmci: Got WP GPIO
+mmci-pl18x 10005000.mmci: mmc0: PL181 manf 41 rev0 at 0x10005000 irq 33,34 (pio)
+10009000.uart: ttyAMA0 at MMIO 0x10009000 (irq = 37, base_baud = 0) is a PL011 rev1
+printk: console [ttyAMA0] enabled
+1000a000.uart: ttyAMA1 at MMIO 0x1000a000 (irq = 38, base_baud = 0) is a PL011 rev1
+1000b000.uart: ttyAMA2 at MMIO 0x1000b000 (irq = 39, base_baud = 0) is a PL011 rev1
+1000c000.uart: ttyAMA3 at MMIO 0x1000c000 (irq = 40, base_baud = 0) is a PL011 rev1
+rtc-pl031 10017000.rtc: registered as rtc0
+rtc-pl031 10017000.rtc: setting system clock to 2026-10-07T22:57:25 UTC (1791413845)
+amba 10020000.clcd: Fixing up cyclic dependency with 0-0039
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+sii902x 0-0039: supply iovcc not found, using dummy regulator
+sii902x 0-0039: supply cvcc12 not found, using dummy regulator
+i2c i2c-0: Added multiplexed i2c bus 2
+drm-clcd-pl111 1001f000.clcd: assigned reserved memory node vram@4c000000
+drm-clcd-pl111 1001f000.clcd: using device-specific reserved memory
+drm-clcd-pl111 1001f000.clcd: core tile graphics present
+drm-clcd-pl111 1001f000.clcd: this device will be deactivated
+drm-clcd-pl111 1001f000.clcd: Versatile Express init failed - -19
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+drm-clcd-pl111 10020000.clcd: found bridge on endpoint 0
+drm-clcd-pl111 10020000.clcd: Using non-panel bridge
+[drm] Initialized pl111 1.0.0 20170317 for 10020000.clcd on minor 0
+input: AT Raw Set 2 keyboard as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10006000.kmi/serio0/input/input0
+Console: switching to colour frame buffer device 128x48
+drm-clcd-pl111 10020000.clcd: [drm] fb0: pl111 frame buffer device
+ALSA device list:
+  #0: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+Freeing unused kernel image (initmem) memory: 1024K
+Run /sbin/init as init process
+[ LAB-02 ] Starting system initialization...
+[ LAB-02 ] Loading lab2_driver module...
+lab2_driver: loading out-of-tree module taints kernel.
+lab2_driver: initializing module
+lab2_driver: /proc/lab2_info created
+lab2_driver: loaded, major=240
+[ LAB-02 ] lab2_driver loaded OK
+[ LAB-02 ] /dev/lab2 created (major=240, minor=0)
+[ LAB-02 ] System initialization complete!
+ -> Run test_driver.sh to test character device
+ -> Run test_procfs.sh to test proc/sysfs interfaces
+ -> cat /proc/lab2_info to view driver stats
+
+Please press Enter to activate this console. input: ImExPS/2 Generic Explorer Mouse as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10007000.kmi/serio1/input/input2
+random: fast init done
+
+/ # qemu-system-arm \
+> -M vexpress-a9 \
+> -cpu cortex-a9 \
+> -m 512M \
+> -smp 2 \
+> -nographic \
+> -kernel ~/embedded_lab1/output/zImage \
+> -dtb ~/embedded_lab1/output/vexpress-v2p-ca9.dtb \
+> -initrd ~/embedded_lab2/output/initramfs_lab2.cpio.gz \
+> -append 'console=ttyAMA0,115200 rdinit=/sbin/init mem=512M'
+-/bin/sh: qemu-system-arm: not found
+/ # lsmod
+lab2_driver 16384 0 - Live 0x7f000000 (O)
+/ # ls -la /dev/lab2
+crw-rw-rw-    1 root     0         240,   0 Oct  7 22:57 /dev/lab2
+/ # cat /proc/lab2_info
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 0 bytes
+Open count : 0
+/ # echo 'Hello LAB2' > /dev/lab2
+lab2_driver: device opened (count=1)
+lab2_driver: received 11 bytes: [Hello LAB2
+]
+lab2_driver: device closed
+/ # cat /dev/lab2
+lab2_driver: device opened (count=2)
+lab2_driver: sent 11 bytes to user
+Hello LAB2
+lab2_driver: device closed
+/ # cat /proc/lab2_info
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 11 bytes
+Open count : 2
+Last data : [Hello LAB2
+]
+/ # cat /sys/class/lab2_class/lab2/buffer_len
+11
+/ # cat /sys/class/lab2_class/lab2/open_count
+2
+/ # cat /sys/class/lab2_class/lab2/last_data
+Hello LAB2
+
+/ # test_procfs.sh
+=== Test procfs & sysfs ===
+--- /proc/lab2_info (before write) ---
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 11 bytes
+Open count : 2
+Last data : [Hello LAB2
+]
+lab2_driver: device opened (count=3)
+lab2_driver: received 30 bytes: [Embedded Linux Lab2 Test Data
+]
+lab2_driver: device closed
+--- /proc/lab2_info (after write) ---
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 30 bytes
+Open count : 3
+Last data : [Embedded Linux Lab2 Test Data
+]
+--- sysfs attributes ---
+buffer_len : 30
+open_count : 3
+last_data  : Embedded Linux Lab2 Test Data
+=== procfs/sysfs Test PASSED ===
+/ # dmesg | grep lab2
+lab2_driver: loading out-of-tree module taints kernel.
+lab2_driver: initializing module
+lab2_driver: /proc/lab2_info created
+lab2_driver: loaded, major=240
+lab2_driver: device opened (count=1)
+lab2_driver: received 11 bytes: [Hello LAB2
+lab2_driver: device closed
+lab2_driver: device opened (count=2)
+lab2_driver: sent 11 bytes to user
+lab2_driver: device closed
+lab2_driver: device opened (count=3)
+lab2_driver: received 30 bytes: [Embedded Linux Lab2 Test Data
+lab2_driver: device closed
+/ # poweroff
+/ # swapoff: can't open '/etc/fstab': No such file or directory
+umount: none busy - remounted read-only
+umount: can't unmount /: Invalid argument
+The system is going down NOW!
+Sent SIGTERM to all processes
+Sent SIGKILL to all processes
+Requesting system poweroff
+Flash device refused suspend due to active operation (state 20)
+Flash device refused suspend due to active operation (state 20)
+reboot: Power down
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ nano ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ chmod +x ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ cd ~/embedded_lab2/rootfs/initramfs
+
+find . | cpio -H newc -o | gzip > \
+~/embedded_lab2/output/initramfs_lab2.cpio.gz
+3388 blocks
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ test_driver.sh
+test_procfs.sh
+test_driver.sh: command not found
+test_procfs.sh: command not found
+ubuntu@ubuntu:~/embedded_lab2/rootfs/initramfs$ qemu-system-arm \
+-M vexpress-a9 \
+-cpu cortex-a9 \
+-m 512M \
+-smp 2 \
+-nographic \
+-kernel ~/embedded_lab1/output/zImage \
+-dtb ~/embedded_lab1/output/vexpress-v2p-ca9.dtb \
+-initrd ~/embedded_lab2/output/initramfs_lab2.cpio.gz \
+-append 'console=ttyAMA0,115200 rdinit=/sbin/init mem=512M'
+Booting Linux on physical CPU 0x0
+Linux version 5.15.0 (ubuntu@ubuntu) (arm-linux-gnueabihf-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #1 SMP Mon Oct 5 03:44:02 UTC 2026
+CPU: ARMv7 Processor [410fc090] revision 0 (ARMv7), cr=10c5387d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT nonaliasing instruction cache
+OF: fdt: Machine model: V2P-CA9
+Memory policy: Data cache writealloc
+Reserved memory: created DMA memory pool at 0x4c000000, size 8 MiB
+OF: reserved mem: initialized node vram@4c000000, compatible id shared-dma-pool
+cma: Reserved 16 MiB at 0x7f000000
+Zone ranges:
+  Normal   [mem 0x0000000060000000-0x000000007fffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000060000000-0x000000007fffffff]
+Initmem setup node 0 [mem 0x0000000060000000-0x000000007fffffff]
+percpu: Embedded 15 pages/cpu s30156 r8192 d23092 u61440
+Built 1 zonelists, mobility grouping on.  Total pages: 130048
+Kernel command line: console=ttyAMA0,115200 rdinit=/sbin/init mem=512M
+printk: log_buf_len individual max cpu contribution: 4096 bytes
+printk: log_buf_len total cpu_extra contributions: 12288 bytes
+printk: log_buf_len min size: 16384 bytes
+printk: log_buf_len: 32768 bytes
+printk: early log buf free: 14992(91%)
+Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+Memory: 489768K/524288K available (8192K kernel code, 593K rwdata, 1764K rodata, 1024K init, 151K bss, 18136K reserved, 16384K cma-reserved)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+trace event string verifier disabled
+rcu: Hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+L2C: platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C: DT/platform modifies aux control register: 0x02020000 -> 0x02420000
+L2C-310 enabling early BRESP for Cortex-A9
+L2C-310 full line of zeros enabled for Cortex-A9
+L2C-310 dynamic clock gating disabled, standby mode disabled
+L2C-310 cache controller enabled, 8 ways, 128 kB
+L2C-310: CACHE_ID 0x410000c8, AUX_CTRL 0x46420001
+random: get_random_bytes called from start_kernel+0x4fc/0x6b0 with crng_init=0
+sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
+Failed to initialize '/bus@40000000/motherboard-bus@40000000/iofpga@7,00000000/timer@12000': -22
+smp_twd: clock not found -2
+Console: colour dummy device 80x30
+Calibrating local timer... 95.98MHz.
+Calibrating delay loop... 1889.07 BogoMIPS (lpj=9445376)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+CPU: Testing write buffer coherency: ok
+CPU0: Spectre v2: using BPIALL workaround
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+Setting up static identity map for 0x60100000 - 0x60100060
+rcu: Hierarchical SRCU implementation.
+smp: Bringing up secondary CPUs ...
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+CPU1: Spectre v2: using BPIALL workaround
+CPU2: failed to boot: -38
+CPU3: failed to boot: -38
+smp: Brought up 1 node, 2 CPUs
+SMP: Total of 2 processors activated (3850.24 BogoMIPS).
+CPU: All CPU(s) started in SVC mode.
+devtmpfs: initialized
+VFP support v0.3: implementor 41 architecture 3 part 30 variant 9 rev 0
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 1024 (order: 4, 65536 bytes, linear)
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+cpuidle: using governor ladder
+hw-breakpoint: debug architecture 0x4 unsupported.
+Serial: AMBA PL011 UART driver
+irq: type mismatch, failed to map hwirq-75 for interrupt-controller@1e001000!
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+Advanced Linux Sound Architecture Driver Initialized.
+clocksource: Switched to clocksource arm,sp804
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 6144 bytes, linear)
+TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+TCP bind hash table entries: 4096 (order: 3, 32768 bytes, linear)
+TCP: Hash tables configured (established 4096 bind 4096)
+UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+Unpacking initramfs...
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+workingset: timestamp_bits=30 max_order=17 bucket_order=0
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+9p: Installing v9fs 9p2000 file system support
+io scheduler mq-deadline registered
+io scheduler kyber registered
+sii902x 0-0060: supply iovcc not found, using dummy regulator
+sii902x 0-0060: supply cvcc12 not found, using dummy regulator
+Freeing initrd memory: 1112K
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x40000000-0x43ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+physmap-flash 40000000.flash: physmap platform flash device: [mem 0x44000000-0x47ffffff]
+40000000.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+Intel/Sharp Extended Query Table at 0x0031
+Using buffer write method
+Concatenating MTD devices:
+(0): "40000000.flash"
+(1): "40000000.flash"
+into device "40000000.flash"
+physmap-flash 48000000.psram: physmap platform flash device: [mem 0x48000000-0x49ffffff]
+libphy: Fixed MDIO Bus: probed
+libphy: smsc911x-mdio: probed
+smsc911x 4e000000.ethernet eth0: MAC Address: 52:54:00:12:34:56
+isp1760 4f000000.usb: isp1760 bus width: 32, oc: digital
+isp1760 4f000000.usb: NXP ISP1760 USB Host Controller
+isp1760 4f000000.usb: new USB bus registered, assigned bus number 1
+isp1760 4f000000.usb: Scratch test failed. 0x00000000
+isp1760 4f000000.usb: can't setup: -19
+isp1760 4f000000.usb: USB bus 1 deregistered
+usbcore: registered new interface driver usb-storage
+ledtrig-cpu: registered to indicate activity on CPUs
+usbcore: registered new interface driver usbhid
+usbhid: USB HID core driver
+NET: Registered PF_PACKET protocol family
+9pnet: Installing 9P2000 support
+Registering SWP/SWPB emulation handler
+aaci-pl041 10004000.aaci: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+aaci-pl041 10004000.aaci: FIFO 512 entries
+mmci-pl18x 10005000.mmci: Got CD GPIO
+mmci-pl18x 10005000.mmci: Got WP GPIO
+mmci-pl18x 10005000.mmci: mmc0: PL181 manf 41 rev0 at 0x10005000 irq 33,34 (pio)
+10009000.uart: ttyAMA0 at MMIO 0x10009000 (irq = 37, base_baud = 0) is a PL011 rev1
+printk: console [ttyAMA0] enabled
+1000a000.uart: ttyAMA1 at MMIO 0x1000a000 (irq = 38, base_baud = 0) is a PL011 rev1
+1000b000.uart: ttyAMA2 at MMIO 0x1000b000 (irq = 39, base_baud = 0) is a PL011 rev1
+1000c000.uart: ttyAMA3 at MMIO 0x1000c000 (irq = 40, base_baud = 0) is a PL011 rev1
+rtc-pl031 10017000.rtc: registered as rtc0
+rtc-pl031 10017000.rtc: setting system clock to 2026-10-07T23:03:36 UTC (1791414216)
+amba 10020000.clcd: Fixing up cyclic dependency with 0-0039
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+sii902x 0-0039: supply iovcc not found, using dummy regulator
+sii902x 0-0039: supply cvcc12 not found, using dummy regulator
+i2c i2c-0: Added multiplexed i2c bus 2
+drm-clcd-pl111 1001f000.clcd: assigned reserved memory node vram@4c000000
+drm-clcd-pl111 1001f000.clcd: using device-specific reserved memory
+drm-clcd-pl111 1001f000.clcd: core tile graphics present
+drm-clcd-pl111 1001f000.clcd: this device will be deactivated
+drm-clcd-pl111 1001f000.clcd: Versatile Express init failed - -19
+drm-clcd-pl111 10020000.clcd: DVI muxed to daughterboard 1 (core tile) CLCD
+drm-clcd-pl111 10020000.clcd: initializing Versatile Express PL111
+drm-clcd-pl111 10020000.clcd: found bridge on endpoint 0
+drm-clcd-pl111 10020000.clcd: Using non-panel bridge
+[drm] Initialized pl111 1.0.0 20170317 for 10020000.clcd on minor 0
+input: AT Raw Set 2 keyboard as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10006000.kmi/serio0/input/input0
+Console: switching to colour frame buffer device 128x48
+drm-clcd-pl111 10020000.clcd: [drm] fb0: pl111 frame buffer device
+ALSA device list:
+  #0: ARM AC'97 Interface PL041 rev0 at 0x10004000, irq 32
+Freeing unused kernel image (initmem) memory: 1024K
+Run /sbin/init as init process
+[ LAB-02 ] Starting system initialization...
+[ LAB-02 ] Loading lab2_driver module...
+lab2_driver: loading out-of-tree module taints kernel.
+lab2_driver: initializing module
+lab2_driver: /proc/lab2_info created
+lab2_driver: loaded, major=240
+[ LAB-02 ] lab2_driver loaded OK
+[ LAB-02 ] /dev/lab2 created (major=240, minor=0)
+[ LAB-02 ] System initialization complete!
+ -> Run test_driver.sh to test character device
+ -> Run test_procfs.sh to test proc/sysfs interfaces
+ -> cat /proc/lab2_info to view driver stats
+
+Please press Enter to activate this console. input: ImExPS/2 Generic Explorer Mouse as /devices/platform/bus@40000000/bus@40000000:motherboard-bus@40000000/bus@40000000:motherboard-bus@40000000:iofpga@7,00000000/10007000.kmi/serio1/input/input2
+random: fast init done
+
+/ # test_driver.sh
+=== LAB-02: Device Driver Test ===
+[1] Checking loaded module...
+lab2_driver 16384 0 - Live 0x7f000000 (O)
+[2] Checking device node...
+crw-rw-rw-    1 root     0         240,   0 Oct  7 23:03 /dev/lab2
+[3] Writing to device...
+lab2_driver: device opened (count=1)
+lab2_driver: received 30 bytes: [Hello from userspace, LAB-02!
+]
+lab2_driver: device closed
+[4] Reading from device...
+lab2_driver: device opened (count=2)
+lab2_driver: sent 30 bytes to user
+lab2_driver: device closed
+Read back: [Hello from userspace, LAB-02!]
+[5] Multiple write/read test...
+lab2_driver: device opened (count=3)
+lab2_driver: received 10 bytes: [Message_1
+]
+lab2_driver: device closed
+lab2_driver: device opened (count=4)
+lab2_driver: sent 10 bytes to user
+Message_1
+lab2_driver: device closed
+lab2_driver: device opened (count=5)
+lab2_driver: received 10 bytes: [Message_2
+]
+lab2_driver: device closed
+lab2_driver: device opened (count=6)
+lab2_driver: sent 10 bytes to user
+Message_2
+lab2_driver: device closed
+lab2_driver: device opened (count=7)
+lab2_driver: received 10 bytes: [Message_3
+]
+lab2_driver: device closed
+lab2_driver: device opened (count=8)
+lab2_driver: sent 10 bytes to user
+Message_3
+lab2_driver: device closed
+[6] Kernel messages:
+lab2_driver: device opened (count=4)
+lab2_driver: sent 10 bytes to user
+lab2_driver: device closed
+lab2_driver: device opened (count=5)
+lab2_driver: received 10 bytes: [Message_2
+lab2_driver: device closed
+lab2_driver: device opened (count=6)
+lab2_driver: sent 10 bytes to user
+lab2_driver: device closed
+lab2_driver: device opened (count=7)
+lab2_driver: received 10 bytes: [Message_3
+lab2_driver: device closed
+lab2_driver: device opened (count=8)
+lab2_driver: sent 10 bytes to user
+lab2_driver: device closed
+=== Test PASSED ===
+/ # test_procfs.sh
+=== Test procfs & sysfs ===
+--- /proc/lab2_info (before write) ---
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 10 bytes
+Open count : 8
+Last data : [Message_3
+]
+lab2_driver: device opened (count=9)
+lab2_driver: received 30 bytes: [Embedded Linux Lab2 Test Data
+]
+lab2_driver: device closed
+--- /proc/lab2_info (after write) ---
+LAB-02 Driver Statistics
+======================
+Driver name : lab2
+Major number : 240
+Buffer size : 1024 bytes
+Data length : 30 bytes
+Open count : 9
+Last data : [Embedded Linux Lab2 Test Data
+]
+--- sysfs attributes ---
+buffer_len : 30
+open_count : 9
+last_data  : Embedded Linux Lab2 Test Data
+=== procfs/sysfs Test PASSED ===
+/ # 
+/ # ls -lh ~/embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh
+ls: //embedded_lab2/rootfs/initramfs/usr/bin/test_driver.sh: No such file or directory
+/ # ls -lh ~/embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh
+ls: //embedded_lab2/rootfs/initramfs/usr/bin/test_procfs.sh: No such file or directory
+/ # 
+/ # 
